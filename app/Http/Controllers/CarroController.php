@@ -22,10 +22,7 @@ class CarroController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+   
 
     /**
      * Store a newly created resource in storage.
@@ -55,10 +52,7 @@ class CarroController extends Controller
      * @param  \App\Models\Carro  $carro
      * @return \Illuminate\Http\Response
      */
-    public function edit(Carro $carro)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.

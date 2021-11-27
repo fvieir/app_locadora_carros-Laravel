@@ -22,10 +22,7 @@ class ModeloController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+ 
 
     /**
      * Store a newly created resource in storage.
@@ -55,10 +52,6 @@ class ModeloController extends Controller
      * @param  \App\Models\Modelo  $modelo
      * @return \Illuminate\Http\Response
      */
-    public function edit(Modelo $modelo)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

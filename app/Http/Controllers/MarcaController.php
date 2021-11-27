@@ -22,10 +22,7 @@ class MarcaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -55,10 +52,7 @@ class MarcaController extends Controller
      * @param  \App\Models\Marca  $marca
      * @return \Illuminate\Http\Response
      */
-    public function edit(Marca $marca)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
