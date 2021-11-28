@@ -41,7 +41,7 @@ class MarcaController extends Controller
     {
         // $marca = Marca::create($request->all())->dd();
         $marca = $this->marca::create($request->all());
-        return $marca;
+        return response()->json($marca, 201);
     }
 
     /**
@@ -79,9 +79,9 @@ class MarcaController extends Controller
     public function update(Request $request, $id)
     {
         $marca = $this->marca->find($id);
-        if ($marca === null) return ['msg' => 'Registro => '. $id .' não encontrado no BD'];
+        if ($marca === null) return \response()->json(['msg' => 'Registro => '. $id .' não encontrado no BD'],404);
         $marca->update($request->all());
-        return $marca;
+        return \response()->json($marca, 200);
     }
     
     /**
@@ -94,9 +94,9 @@ class MarcaController extends Controller
     {
         try {
             $marca = $this->marca->find($id);
-            if ($marca === null) return ['msg' => 'Registro => '. $id .' não encontrado no BD'];
+            if ($marca === null) return \response()->json(['msg' => 'Registro => '. $id .' não encontrado no BD'], 404);
             $marca->delete();
-            return ['Message' => true];
+            return \response()->json(['Message' => true], 200);
         } catch (\Exception $e) {
             return $e;
         }
