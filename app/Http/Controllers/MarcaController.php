@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\MarcaRequest;
 use App\Models\Marca;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,7 @@ class MarcaController extends Controller
     {
         // $marcas = Marca::all();
         $marcas = $this->marca::all();
-        return response()->json($marcas, 200,);
+        return response()->json($marcas, 200);
     }
 
     /**
@@ -37,10 +38,11 @@ class MarcaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(MarcaRequest $request)
     {
         // $marca = Marca::create($request->all())->dd();
         $marca = $this->marca::create($request->all());
+        
         return response()->json($marca, 201);
     }
 

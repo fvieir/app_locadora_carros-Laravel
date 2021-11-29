@@ -13,7 +13,7 @@ class MarcaRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,16 @@ class MarcaRequest extends FormRequest
     public function rules()
     {
         return [
-            'nome' => 'required'
+            'nome' => 'required| unique:marcas,nome',
+            'imagem' => 'required',
+        ];
+    }
+
+    public function messages() {
+        return [
+            'nome.required' => 'Campo nome é obrigatório',
+            'nome.unique' => 'Registro nome já esta inserido no sistema, é um campo unico.',
+            'imagem.required' => 'Campo imagem é obrigatório'
         ];
     }
 }
