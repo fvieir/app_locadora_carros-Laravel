@@ -78,11 +78,16 @@ class MarcaController extends Controller
      * @param  Integer
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(MarcaRequest $request, Marca $marca)
     {
-        $marca = $this->marca->find($id);
-        if ($marca === null) return \response()->json(['msg' => 'Registro => '. $id .' não encontrado no BD'],404);
+        // $marca = $this->marca->find($id);
+
+        if ($marca === null) return \response()->json(['msg' => 'Registro => '. $marca->id .' não encontrado no BD'],404);
+
+        // $request->validate($marca->rules(), $marca->messages()); // Chama validações que estão no Model
+        
         $marca->update($request->all());
+
         return \response()->json($marca, 200);
     }
     
