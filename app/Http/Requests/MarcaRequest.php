@@ -27,7 +27,7 @@ class MarcaRequest extends FormRequest
             
             $rules = [
                 'nome' => 'required|unique:marcas,nome,'.$this->marca->id.'|min:3',
-                'imagem' => 'required'
+                'imagem' => 'required|mimes:png,pdf|max:3000'
             ];
             /*
            unique
@@ -38,7 +38,7 @@ class MarcaRequest extends FormRequest
         } else {
             $rules = [
                 'nome' => 'required| unique:marcas,nome,|min:3',
-                'imagem' => 'required',
+                'imagem' => 'required|mimes:png,pdf|max:1000',
             ];
         }
         
@@ -70,7 +70,8 @@ class MarcaRequest extends FormRequest
         return [
             'nome.required' => 'Campo nome é obrigatório',
             'nome.unique' => 'Registro nome já esta inserido no sistema, é um campo unico.',
-            'imagem.required' => 'Campo imagem é obrigatório'
+            'imagem.required' => 'Campo imagem é obrigatório',
+            'imagem.mimes' => 'Tipo de arquivo deve ser do tipo PNG ou PDF'
         ];
     }
 }
