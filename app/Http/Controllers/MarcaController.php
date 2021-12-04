@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MarcaRequest;
 use App\Models\Marca;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MarcaController extends Controller
 {
@@ -94,6 +95,11 @@ class MarcaController extends Controller
         if ($marca === null) return \response()->json(['msg' => 'Registro => '. $marca->id .' não encontrado no BD'],404);
 
         // $request->validate($marca->rules(), $marca->messages()); // Chama validações que estão no Model
+
+        if (isset($marca->imagem) && !empty($marca->imagem)) {
+            // dd('/'.$marca->imagem);
+            Storage::disk('public')->put('/'.$marca->imagem,\request()->file('imagem'));
+        }
 
         $marca->update($request->all());
 
