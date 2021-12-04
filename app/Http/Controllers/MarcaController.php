@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\MarcaRequest;
 use App\Models\Marca;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MarcaController extends Controller
 {
@@ -41,7 +42,16 @@ class MarcaController extends Controller
     public function store(MarcaRequest $request)
     {
         // $marca = Marca::create($request->all())->dd();
-        $marca = $this->marca::create($request->all());
+
+        $file = $request->file('imagem');
+        $nome = $request->input('nome');
+
+        $file_name = $file->store('Marca','public');
+
+        $marca = $this->marca::create([
+            'nome' => $nome,
+            'imagem' => $file_name
+        ]);
         
         return response()->json($marca, 201);
     }
@@ -85,7 +95,12 @@ class MarcaController extends Controller
         if ($marca === null) return \response()->json(['msg' => 'Registro => '. $marca->id .' não encontrado no BD'],404);
 
         // $request->validate($marca->rules(), $marca->messages()); // Chama validações que estão no Model
-        
+
+        if (isset($marca->imagem) && !empty($marca->imagem)) {
+            // dd('/'.$marca->imagem);
+            Storage::disk('public')->put('/'.$marca->imagem,\request()->file('imagem'));
+        }
+
         $marca->update($request->all());
 
         return \response()->json($marca, 200);
