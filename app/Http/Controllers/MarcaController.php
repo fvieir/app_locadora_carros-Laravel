@@ -130,10 +130,15 @@ class MarcaController extends Controller
         try {
             $marca = $this->marca->find($id);
             if ($marca === null) return \response()->json(['msg' => 'Registro => '. $id .' não encontrado no BD'], 404);
+
+            if (isset ($marca->imagem) ) {
+                Storage::disk('public')->delete($marca->imagem);
+            }
+
             $marca->delete();
             return \response()->json(['Message' => true], 200);
         } catch (\Exception $e) {
-            return $e;
+            return $this->ErrorException($e);
         }
     }
 }
