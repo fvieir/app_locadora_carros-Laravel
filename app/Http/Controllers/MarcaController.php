@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MarcaRequest;
 use App\Models\Marca;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Traits\ErrorException;
 
 class MarcaController extends Controller
 {
+    use ErrorException;
 
     public function __construct(Marca $marca)
     {
@@ -46,7 +49,7 @@ class MarcaController extends Controller
         $file = $request->file('imagem');
         $nome = $request->input('nome');
 
-        $file_name = $file->store('Marca','public');
+        $file_name = $file->store('marca','public');
 
         $marca = $this->marca::create([
             'nome' => $nome,
@@ -90,20 +93,30 @@ class MarcaController extends Controller
      */
     public function update(MarcaRequest $request, Marca $marca)
     {
-        // $marca = $this->marca->find($id);
-
-        if ($marca === null) return \response()->json(['msg' => 'Registro => '. $marca->id .' não encontrado no BD'],404);
-
-        // $request->validate($marca->rules(), $marca->messages()); // Chama validações que estão no Model
-
-        if (isset($marca->imagem) && !empty($marca->imagem)) {
-            // dd('/'.$marca->imagem);
-            Storage::disk('public')->put('/'.$marca->imagem,\request()->file('imagem'));
+        try {
+            $file = $request->file('imagem');
+            $nome = \request()->get('nome');
+    
+            // $marca = $this->marca->find($id);
+            if ($marca === null) return \response()->json(['msg' => 'Registro => '. $marca->id .' não encontrado no BD'],404);
+            // $request->validate($marca->rules(), $marca->messages()); // Chama validações que estão no Model
+    
+            if (isset($marca->imagem) && isset($file)) {
+                Storage::disk('public')->delete($marca->imagem);
+            }
+    
+            $file_name = $file->store('marca','public');
+            
+            $marca->update([
+                'nome' => $nome,
+                'imagem' => $file_name,
+            ]);
+    
+            return \response()->json($marca, 200);
+        
+        } catch (Exception $e) {
+            return $this->ErrorException($e);
         }
-
-        $marca->update($request->all());
-
-        return \response()->json($marca, 200);
     }
     
     /**
