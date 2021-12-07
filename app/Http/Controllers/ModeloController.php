@@ -4,9 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Modelo;
 use Illuminate\Http\Request;
+use App\Traits\ErrorException;
 
 class ModeloController extends Controller
 {
+    use ErrorException;
+
+    public function __construct(Modelo $modelo)
+    {
+        $this->modelo = $modelo;        
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +22,7 @@ class ModeloController extends Controller
      */
     public function index()
     {
-        //
+        return \response()->json($this->modelo->all(), 200);
     }
 
     /**
@@ -32,7 +40,26 @@ class ModeloController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $t = $request->validate($this->modelo->rules());
+            
+            $imagem = $request->file('imagem');
+            $imagem_urn = $imagem->store('marca/modelo','public');
+            
+            $modelo = $this->modelo->create([
+                    'marca_id' => $request->marca_id,
+                    'nome' => $request->nome,
+                    'imagem' => $imagem_urn,
+                    'numero_portas' => $request->numero_portas,
+                    'lugares' => $request->lugares,
+                    'air_bag'=> $request->air_bag,
+                    'abs' => $request->air_bag,
+            ]);
+        
+            return response()->json($modelo, 200);
+        } catch (\Exception $e) {
+            $this->ErrorException($e);        
+        }
     }
 
     /**
@@ -41,9 +68,13 @@ class ModeloController extends Controller
      * @param  \App\Models\Modelo  $modelo
      * @return \Illuminate\Http\Response
      */
-    public function show(Modelo $modelo)
+    public function show($id)
     {
-        //
+        $modelo = $this->modelo->find($id);
+
+        if ($modelo === null) return response()->json(['erro' => 'Recurso pesquisado não existe'], 404); 
+
+        return \response()->json($modelo, 200);
     }
 
     /**
@@ -62,7 +93,17 @@ class ModeloController extends Controller
      */
     public function update(Request $request, Modelo $modelo)
     {
-        //
+        if ($modelo === null) {
+            return response()->json(['error' => 'Impossível realizar a atualização'], 404);
+        }
+
+        if ($request->method() === 'PATCH') {
+            $regras_dinamicas = array();
+
+            foreach ($modelo->rules() as $input => $regra) {
+                
+            }
+        }
     }
 
     /**
