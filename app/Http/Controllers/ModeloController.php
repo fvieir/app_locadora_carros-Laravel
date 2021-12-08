@@ -41,27 +41,22 @@ class ModeloController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-            $request->validate($this->modelo->rules());
+        $request->validate($this->modelo->rules());
 
-            $imagem = $request->file('imagem');
-            $imagem_urn = $imagem->store('marca/modelo','public');
-            
-            $modelo = $this->modelo->create([
-                'marca_id' => $request->marca_id,
-                'nome' => $request->nome,
-                'imagem' => $imagem_urn,
-                'numero_portas' => $request->numero_portas,
-                'lugares' => $request->lugares,
-                'air_bag'=> $request->air_bag,
-                'abs' => $request->air_bag,
-            ]);
-            
-            return response()->json($modelo, 201);
-        } 
-        catch (\Exception $e) {
-            return $this->ErrorException($e);        
-        }
+        $imagem = $request->file('imagem');
+        $imagem_urn = $imagem->store('marca/modelo','public');
+        
+        $modelo = $this->modelo->create([
+            'marca_id' => $request->marca_id,
+            'nome' => $request->nome,
+            'imagem' => $imagem_urn,
+            'numero_portas' => $request->numero_portas,
+            'lugares' => $request->lugares,
+            'air_bag'=> $request->air_bag,
+            'abs' => $request->air_bag,
+        ]);
+        
+        return response()->json($modelo, 201);
     }
 
     /**
