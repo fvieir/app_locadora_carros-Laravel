@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Modelo;
 use Illuminate\Http\Request;
 use App\Traits\ErrorException;
+use Illuminate\Support\Facades\Storage;
 
 class ModeloController extends Controller
 {
@@ -41,24 +42,25 @@ class ModeloController extends Controller
     public function store(Request $request)
     {
         try {
-            $t = $request->validate($this->modelo->rules());
-            
+            $request->validate($this->modelo->rules());
+
             $imagem = $request->file('imagem');
             $imagem_urn = $imagem->store('marca/modelo','public');
             
             $modelo = $this->modelo->create([
-                    'marca_id' => $request->marca_id,
-                    'nome' => $request->nome,
-                    'imagem' => $imagem_urn,
-                    'numero_portas' => $request->numero_portas,
-                    'lugares' => $request->lugares,
-                    'air_bag'=> $request->air_bag,
-                    'abs' => $request->air_bag,
+                'marca_id' => $request->marca_id,
+                'nome' => $request->nome,
+                'imagem' => $imagem_urn,
+                'numero_portas' => $request->numero_portas,
+                'lugares' => $request->lugares,
+                'air_bag'=> $request->air_bag,
+                'abs' => $request->air_bag,
             ]);
-        
-            return response()->json($modelo, 200);
-        } catch (\Exception $e) {
-            $this->ErrorException($e);        
+            
+            return response()->json($modelo, 201);
+        } 
+        catch (\Exception $e) {
+            return $this->ErrorException($e);        
         }
     }
 
@@ -91,19 +93,50 @@ class ModeloController extends Controller
      * @param  \App\Models\Modelo  $modelo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Modelo $modelo)
+    public function update(Request $request, $id)
     {
+        $modelo = $this->modelo->find($id);
+        $imagem = $request->file('imagem');
+
         if ($modelo === null) {
             return response()->json(['error' => 'Impossível realizar a atualização'], 404);
         }
 
         if ($request->method() === 'PATCH') {
+
             $regras_dinamicas = array();
 
             foreach ($modelo->rules() as $input => $regra) {
-                
+                if (array_key_exists($input,\request()->all())) {
+                    $regras_dinamicas[$input] = $regra; 
+                }
             }
+            
+            $request->validate($regras_dinamicas);
+
+        } else {
+            $request->validate($modelo->rules());
         }
+
+
+        if($imagem && isset($modelo->imagem)) {
+            Storage::disk('public')->delete($modelo->imagem);
+        }
+
+        $imagem_urn = $imagem->store('marca/modelo','public');
+
+        $modelo->update([
+            'marca_id' => $request->marca_id,
+            'nome' => $request->nome,
+            'imagem' => $imagem_urn,
+            'numeros_portas' => $request->numeros_portas,
+            'lugares' => $request->lugares,
+            'air_bag' => $request->air_bag,
+            'abs' => $request->abs,
+        ]);
+
+        return \response()->json($modelo, 200);
+
     }
 
     /**
@@ -112,8 +145,23 @@ class ModeloController extends Controller
      * @param  \App\Models\Modelo  $modelo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Modelo $modelo)
-    {
-        //
+    public function destroy($id)
+    {   
+        try {
+            $modelo = $this->modelo->find($id);
+
+            if ($modelo === null) {
+                return response()->json(['error' => 'Impossível realizar a exclusão. Registro não existe'], 404);
+            }
+
+            Storage::disk('public')->delete($modelo->imagem);
+
+            $modelo->delete();
+
+            return \response()->json(['msg' => 'O modelo foi removido com sucesso!'], 200);
+        } 
+        catch (\Exception $e) {
+            return $this->ErrorException($e);
+        }
     }
 }
