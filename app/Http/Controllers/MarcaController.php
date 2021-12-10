@@ -68,7 +68,7 @@ class MarcaController extends Controller
     public function show($id)
     {
         try {
-            $marca = $this->marca->find($id);
+            $marca = $this->marca->with('modelos')->find($id);
             if ($marca === null) return response()->json(['msg' => 'Registro não encontrado'], 404);
             return response()->json($marca, 200);
         } catch (\Exception $e) {
@@ -95,26 +95,23 @@ class MarcaController extends Controller
     {
         try {
             $file = $request->file('imagem');
-            $nome = \request()->get('nome');
-    
-            // $marca = $this->marca->find($id);
+        
             if ($marca === null) return \response()->json(['msg' => 'Registro => '. $marca->id .' não encontrado no BD'],404);
-            // $request->validate($marca->rules(), $marca->messages()); // Chama validações que estão no Model
     
             if (isset($marca->imagem) && isset($file)) {
                 Storage::disk('public')->delete($marca->imagem);
             }
     
             $file_name = $file->store('marca','public');
-            
-            $marca->update([
-                'nome' => $nome,
-                'imagem' => $file_name,
-            ]);
+
+            $marca->fill($request->all());
+            $marca->imagem = $file_name;
+            $marca->save();
+            \dump($marca);
     
             return \response()->json($marca, 200);
-        
-        } catch (Exception $e) {
+        } 
+        catch (Exception $e) {
             return $this->ErrorException($e);
         }
     }
