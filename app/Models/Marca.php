@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Modelo;
 
 class Marca extends Model
 {
@@ -14,8 +15,12 @@ class Marca extends Model
         'imagem'
     ];
 
-    // Validações no Model
 
+    public function modelos() {
+        return $this->hasMany(Modelo::class);
+    }
+
+    // Validações no Model
     public function rules() {
         return [
             'nome' => 'required|unique:marcas,nome,'. $this->id .'|min:3',
