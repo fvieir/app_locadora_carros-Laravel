@@ -67,7 +67,7 @@ class ModeloController extends Controller
      */
     public function show($id)
     {
-        $modelo = $this->modelo->find($id);
+        $modelo = $this->modelo->with('marca')->find($id);
 
         if ($modelo === null) return response()->json(['erro' => 'Recurso pesquisado não existe'], 404); 
 
@@ -94,7 +94,7 @@ class ModeloController extends Controller
         $imagem = $request->file('imagem');
 
         if ($modelo === null) {
-            return response()->json(['error' => 'Impossível realizar a atualização'], 404);
+            return response()->json(['error' => 'Impossível realizar a atualização, registro não encontrado no BD'], 404);
         }
 
         if ($request->method() === 'PATCH') {
@@ -120,15 +120,19 @@ class ModeloController extends Controller
 
         $imagem_urn = $imagem->store('marca/modelo','public');
 
-        $modelo->update([
-            'marca_id' => $request->marca_id,
-            'nome' => $request->nome,
-            'imagem' => $imagem_urn,
-            'numeros_portas' => $request->numeros_portas,
-            'lugares' => $request->lugares,
-            'air_bag' => $request->air_bag,
-            'abs' => $request->abs,
-        ]);
+        $modelo->fill($request->all());
+        $modelo->imagem = $imagem_urn;
+        $modelo->save();
+
+        // $modelo->update([
+        //     'marca_id' => $request->marca_id,
+        //     'nome' => $request->nome,
+        //     'imagem' => $imagem_urn,
+        //     'numeros_portas' => $request->numeros_portas,
+        //     'lugares' => $request->lugares,
+        //     'air_bag' => $request->air_bag,
+        //     'abs' => $request->abs,
+        // ]);
 
         return \response()->json($modelo, 200);
 
