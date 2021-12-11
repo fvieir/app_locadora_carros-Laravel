@@ -21,9 +21,30 @@ class ModeloController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return \response()->json($this->modelo->with('marca')->get(), 200);
+        $modelo = [];
+
+        if ($request->has('relacionamento')) 
+        {      
+            $relacionamento = $request->relacionamento; 
+            $modelo = $this->modelo->with('marca:id,'.$relacionamento);
+        } else {
+            $modelo = $this->modelo->with('marca');
+        }
+        
+        if ($request->has('atributos')) 
+        {
+            $atributos = $request->atributos;
+            $modelo = $this->modelo->selectRaw($atributos)->get();
+
+            return response()->json($modelo, 200);
+        } else {
+            $modelo = $this->modelo->get();
+            return \response()->json($modelo, 200);
+        }
+
+        return [false];
     }
 
     /**
