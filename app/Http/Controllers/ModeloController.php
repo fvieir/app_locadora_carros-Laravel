@@ -25,10 +25,10 @@ class ModeloController extends Controller
     {
         $modelo = [];
 
-        if ($request->has('relacionamento')) 
+        if ($request->has('atributos_marca')) 
         {      
-            $relacionamento = $request->relacionamento; 
-            $modelo = $this->modelo->with('marca:id,'.$relacionamento);
+            $atributos_marca = $request->atributos_marca; 
+            $modelo = $this->modelo->with('marca:id,'.$atributos_marca);
         } else {
             $modelo = $this->modelo->with('marca');
         }
@@ -36,11 +36,11 @@ class ModeloController extends Controller
         if ($request->has('atributos')) 
         {
             $atributos = $request->atributos;
-            $modelo = $this->modelo->selectRaw($atributos)->get();
+            $modelo = $modelo->selectRaw($atributos)->get();
 
             return response()->json($modelo, 200);
         } else {
-            $modelo = $this->modelo->get();
+            $modelo = $modelo->get();
             return \response()->json($modelo, 200);
         }
 
