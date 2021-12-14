@@ -32,11 +32,17 @@ class ModeloController extends Controller
         } else {
             $modelo = $this->modelo->with('marca');
         }
+
+        if($request->has('filtro')) {
+            $filtro = explode(':', $request->filtro);
+            $modelo = $modelo->where($filtro[0],$filtro[1],$filtro[2]);
+        }
         
         if ($request->has('atributos')) 
         {
             $atributos = $request->atributos;
             $modelo = $modelo->selectRaw($atributos)->get();
+
 
             return response()->json($modelo, 200);
         } else {
