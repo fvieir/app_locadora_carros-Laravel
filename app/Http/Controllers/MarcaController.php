@@ -26,16 +26,21 @@ class MarcaController extends Controller
     {
         $marcas = [];
         
-        if ($request->has('relacionamento')) {
-            $relacionamento = $request->relacionamento;
-            $marcas = $this->marca->with('modelos:marca_id,'.$relacionamento);
+        if ($request->has('atributos_modelo')) {
+            $atributos_modelo = $request->atributos_modelo;
+            $marcas = $this->marca->with('modelos:marca_id,'.$atributos_modelo);
         } else {
             $marcas = $this->marca->with('modelos');
         }
 
         if ($request->has('filtro')) {
-            $filtro = \explode(':', $request->filtro);
-            $marcas = $marcas->where($filtro[0],$filtro[1],$filtro[2]);
+
+            $filtros = \explode(';', $request->filtro);
+
+            foreach ($filtros as $key => $condicoes) {
+                $c = \explode(':', $condicoes);
+                $marcas = $marcas->where($c[0],$c[1],$c[2]);
+            }
         }
 
         if($request->has('atributos')) 
@@ -50,7 +55,6 @@ class MarcaController extends Controller
             return response()->json($marcas, 200);
         }
 
-        return [false];
     }
 
     /**
