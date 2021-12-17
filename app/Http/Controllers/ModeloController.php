@@ -25,6 +25,7 @@ class ModeloController extends Controller
     {
         $modelo = [];
 
+        //Relacionamento com atributos selecionados ou todos
         if ($request->has('atributos_marca')) 
         {      
             $atributos_marca = $request->atributos_marca; 
@@ -33,24 +34,29 @@ class ModeloController extends Controller
             $modelo = $this->modelo->with('marca');
         }
 
+        // Filtros no Where
         if($request->has('filtro')) {
-            $filtro = explode(':', $request->filtro);
-            $modelo = $modelo->where($filtro[0],$filtro[1],$filtro[2]);
+
+            $filtros = \explode(';',$request->filtro);
+            
+            foreach ($filtros as $key => $condições) {
+                $c = explode(':',$condições);
+                $modelo = $modelo->where($c[0],$c[1],$c[2]);
+            }
         }
         
+        // Retornando dados 
         if ($request->has('atributos')) 
         {
             $atributos = $request->atributos;
             $modelo = $modelo->selectRaw($atributos)->get();
-
-
             return response()->json($modelo, 200);
         } else {
             $modelo = $modelo->get();
             return \response()->json($modelo, 200);
         }
-
-        return [false];
+    
+        return false;
     }
 
     /**
