@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\PostImage;
+use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,4 +21,16 @@ Route::get('/', function () {
 
 Route::get('teste', function () {
     return 'Ola';
+});
+
+Route::get('sub', function() {
+    $post = Post::select('id','title')
+        ->addSelect([
+        'thumb' => PostImage::selectRaw('COUNT(*) as t')
+                    ->whereColumn('post_id', 'posts.id')
+                    ->limit(1)
+    ])->where('id', 292)
+    ->get();
+
+    return $post;
 });
