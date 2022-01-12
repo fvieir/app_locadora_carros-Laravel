@@ -6,6 +6,7 @@ use App\Models\Modelo;
 use Illuminate\Http\Request;
 use App\Traits\ErrorException;
 use Illuminate\Support\Facades\Storage;
+use App\Repositories\ModeloRepositories;
 
 class ModeloController extends Controller
 {
@@ -23,40 +24,30 @@ class ModeloController extends Controller
      */
     public function index(Request $request)
     {
-        $modelo = [];
+        $modeloRepo = new ModeloRepositories($this->modelo);
 
-        //Relacionamento com atributos selecionados ou todos
-        if ($request->has('atributos_marca')) 
+        if ($request->has('atributos_modelo')) 
         {      
-            $atributos_marca = $request->atributos_marca; 
-            $modelo = $this->modelo->with('marca:id,'.$atributos_marca);
+            $atributos_modelos = 'marca:id,'.$request->atributos_modelo; 
+            $modeloRepo->selectAtrRegistrosRelacionados($atributos_modelos);
         } else {
-            $modelo = $this->modelo->with('marca');
+            $modeloRepo->selectAtrRegistrosRelacionados('marca');
         }
 
         // Filtros no Where
         if($request->has('filtro')) {
-
-            $filtros = \explode(';',$request->filtro);
-            
-            foreach ($filtros as $key => $condições) {
-                $c = explode(':',$condições);
-                $modelo = $modelo->where($c[0],$c[1],$c[2]);
-            }
+            $modeloRepo->filtro($request->filtro);
         }
         
         // Retornando dados 
         if ($request->has('atributos')) 
         {
-            $atributos = $request->atributos;
-            $modelo = $modelo->selectRaw($atributos)->get();
-            return response()->json($modelo, 200);
-        } else {
-            $modelo = $modelo->get();
-            return \response()->json($modelo, 200);
+            $modeloRepo->selectAtr($request->get('atributos'));
         }
     
-        return false;
+        $modelo = $modeloRepo->getResultados();
+
+        return $modelo;
     }
 
     /**

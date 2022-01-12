@@ -26,7 +26,6 @@ class MarcaController extends Controller
     public function index(Request $request)
     {
         $marcaRepo = new MarcaRepositories($this->marca);
-        $marcas = [];
 
         if ($request->has('atributos_modelo')) {
             $atributos_modelo = 'modelos:marca_id,'. $request->atributos_modelo;
@@ -43,7 +42,7 @@ class MarcaController extends Controller
             $marcaRepo->selectAtr($request->get('atributos'));
         }
 
-        $marca = $marcaRepo->getResultado();
+        $marca = $marcaRepo->getResultados();
 
         return $marca;
     }
