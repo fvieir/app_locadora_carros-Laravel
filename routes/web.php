@@ -3,6 +3,7 @@
 use App\Models\PostImage;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,4 +34,13 @@ Route::get('sub', function() {
     ->get();
 
     return $post;
+});
+
+Route::get('email', function () {
+    try {
+        Mail::send(new \App\Mail\MensagemTesteMail());
+        return 'Email enviado com sucesso';
+    } catch (\Exception $e) {
+        return $e->getMessage();
+    }
 });
