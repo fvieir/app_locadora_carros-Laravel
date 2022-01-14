@@ -38,6 +38,7 @@ Route::get('sub', function() {
 
 Route::get('email', function () {
     try {
+        // return new \App\Mail\MensagemTesteMail();
         Mail::send(new \App\Mail\MensagemTesteMail());
         return 'Email enviado com sucesso';
     } catch (\Exception $e) {

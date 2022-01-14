@@ -28,7 +28,7 @@ class MensagemTesteMail extends Mailable
      */
     public function build()
     {
-        return $this->to('fcvieira2@gmail.com')
+        return $this->to(['fcvieira2@gmail.com','fabrizio003@hotmail.com'])
             ->subject('Teste')
             ->from('fcvieira2@gmail.com')
             ->markdown('emails.mensagem-teste');
