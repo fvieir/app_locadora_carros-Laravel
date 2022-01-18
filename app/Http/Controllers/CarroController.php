@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CarroRequest;
 use App\Models\Carro;
+use App\Repositories\CarroRepositories;
 use Illuminate\Http\Request;
 
 class CarroController extends Controller
@@ -12,9 +14,34 @@ class CarroController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    public function __construct(Carro $carro)
     {
-        //
+        $this->carro = $carro;
+    }
+    
+    public function index(Request $request)
+    {
+        $carroRepo = new CarroRepositories($this->carro);
+
+        if ($request->has('atributos_modelo')) {
+            $atributos_carro = 'modelos:modelo_id,'.$request->atributos_modelo;
+            $carroRepo->selectAtrRegistrosRelacionados($atributos_carro);
+        } else {
+            $carroRepo->selectAtrRegistrosRelacionados('modelos');
+        }
+
+        if ($request->has('filtro')) {
+            $carroRepo->filtro($request->get('filtro'));
+        }
+
+        if ($request->has('atributos')) {
+            $carroRepo->selectAtr($request->get('atributos'));
+        }
+
+        $carro = $carroRepo->getResultados();
+
+        return $carro;
     }
 
     /**
@@ -30,9 +57,21 @@ class CarroController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CarroRequest $request)
     {
-        //
+        $modelo_id = $request->get('modelo_id');
+        $placa = $request->get('placa');
+        $disponivel = $request->get('disponivel');
+        $km = $request->get('km');
+
+        $carro = $this->carro::create([
+            'placa' => $placa,
+            'disponivel' => $disponivel,
+            'km' => $km,
+            'modelo_id' => $modelo_id
+        ]);
+
+        return \response()->json($carro);
     }
 
     /**
@@ -41,9 +80,15 @@ class CarroController extends Controller
      * @param  \App\Models\Carro  $carro
      * @return \Illuminate\Http\Response
      */
-    public function show(Carro $carro)
+    public function show($id)
     {
-        //
+        try {
+            $carro = $this->carro::with('modelos')->find($id);
+            if ($carro === null) return response()->json(['msg' => 'Registro não encontrado']);
+            return response()->json($carro, 200);
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 
     /**
