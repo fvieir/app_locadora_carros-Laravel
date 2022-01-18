@@ -31,6 +31,6 @@ class MensagemTesteMail extends Mailable
         return $this->to(['fcvieira2@gmail.com','fabrizio003@hotmail.com'])
             ->subject('Teste')
             ->from('fcvieira2@gmail.com')
-            ->markdown('emails.mensagem-teste');
+            ->markdown('emails.teste.mensagem-teste');
     }
 }
