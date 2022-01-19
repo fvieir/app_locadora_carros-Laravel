@@ -106,9 +106,18 @@ class CarroController extends Controller
      * @param  \App\Models\Carro  $carro
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Carro $carro)
+    public function update(CarroRequest $request, Carro $carro)
     {
-        //
+        try {
+            if ($carro === null) return response()->json(['msg' => 'Registro não encontrado'], 404);
+
+            $carro->fill($request->all());
+            $carro->save();
+
+            return response()->json($carro, 200);
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 
     /**
@@ -117,8 +126,16 @@ class CarroController extends Controller
      * @param  \App\Models\Carro  $carro
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Carro $carro)
+    public function destroy($id)
     {
-        //
+        try {
+            $carro = $this->carro->find($id);
+            if($carro === null) return response()->json(['msg' => 'Registro não encontrado!'], 404);
+    
+            $carro->delete();
+            return response()->json(['message' => true], 200);
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 }

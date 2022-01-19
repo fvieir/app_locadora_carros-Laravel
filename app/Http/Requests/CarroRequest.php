@@ -13,7 +13,7 @@ class CarroRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -23,8 +23,40 @@ class CarroRequest extends FormRequest
      */
     public function rules()
     {
+        $rules = [
+            'placa' => 'required',
+            'disponivel' => 'required',
+            'km' => 'required'
+        ];
+
+        if ($this->method() === 'PATCH') {
+
+            if (\request()->all() === [] || \request()->all() === null) {
+                return  $rules;
+            }
+
+            $rules_patch = '';
+
+            foreach ($rules as $input => $regras) {
+                $conteudo = \request()->all();
+
+                if (\array_key_exists($input, $conteudo)) {
+                    $rules_patch = [$input => $regras];
+                }
+            }
+            return $rules_patch;
+        }
+
+        return $rules;
+        
+    }
+
+    public function messages()
+    {
         return [
-            //
+            'placa.required' => 'Placa é um campo obrigatório',
+            'disponivel.required' => 'Disponivel é um campo obrigatório',
+            'km.required' => 'km é um campo obrigatório',
         ];
     }
 }
