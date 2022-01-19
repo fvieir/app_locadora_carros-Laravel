@@ -12,6 +12,11 @@ class Carro extends Model
     protected $fillable = [
         'placa',
         'disponivel',
-        'km'
+        'km',
+        'modelo_id'
     ];
+
+    public function modelo () {
+        return $this->belongsTo('\App\Models\Modelo');
+    }
 }

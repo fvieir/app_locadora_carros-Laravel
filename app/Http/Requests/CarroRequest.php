@@ -26,7 +26,8 @@ class CarroRequest extends FormRequest
         $rules = [
             'placa' => 'required',
             'disponivel' => 'required',
-            'km' => 'required'
+            'km' => 'required',
+            'modelo_id' => 'required'
         ];
 
         if ($this->method() === 'PATCH') {
@@ -57,6 +58,7 @@ class CarroRequest extends FormRequest
             'placa.required' => 'Placa é um campo obrigatório',
             'disponivel.required' => 'Disponivel é um campo obrigatório',
             'km.required' => 'km é um campo obrigatório',
+            'modelo_id.required' => 'Id modelo é obrigatório'
         ];
     }
 }

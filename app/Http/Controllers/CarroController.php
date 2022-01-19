@@ -25,10 +25,10 @@ class CarroController extends Controller
         $carroRepo = new CarroRepositories($this->carro);
 
         if ($request->has('atributos_modelo')) {
-            $atributos_carro = 'modelos:modelo_id,'.$request->atributos_modelo;
+            $atributos_carro = 'modelo:id,'.$request->atributos_modelo;
             $carroRepo->selectAtrRegistrosRelacionados($atributos_carro);
         } else {
-            $carroRepo->selectAtrRegistrosRelacionados('modelos');
+            $carroRepo->selectAtrRegistrosRelacionados('modelo');
         }
 
         if ($request->has('filtro')) {
