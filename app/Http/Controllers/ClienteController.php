@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use App\Repositories\ClienteRepositories;
+use App\Http\Requests\ClienteRequest;
 
 class ClienteController extends Controller
 {
@@ -12,9 +14,27 @@ class ClienteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+    public function __construct(Cliente $cliente)
     {
-        //
+        $this->cliente = $cliente;
+    }
+
+    public function index(Request $request)
+    {
+        $clienteRepo = new ClienteRepositories($this->cliente);
+
+        if ($request->has('filtro')) {
+            $clienteRepo->filtro($request->get('filtro'));
+        }
+
+        if ($request->has('atributos')) {
+            $clienteRepo->selectAtr($request->get('atributos'));
+        }
+
+        $cliente = $clienteRepo->getResultados();
+
+        return $cliente;
     }
 
     /**
@@ -30,9 +50,20 @@ class ClienteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ClienteRequest $request)
     {
-        //
+        try {
+            $name = $request->get('nome');
+    
+            $cliente = $this->cliente::create([
+                'nome' => $name
+            ]);
+    
+            return response()->json($cliente, 201);
+            
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 
     /**
@@ -41,9 +72,15 @@ class ClienteController extends Controller
      * @param  \App\Models\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
-    public function show(Cliente $cliente)
+    public function show($id)
     {
-        //
+        try {
+            $cliente = $this->cliente::find($id);
+            if ($cliente === null) return response()->json(['msg' => 'Registro não encontrado'], 404);
+            return response()->json($cliente, 200);
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 
     /**

@@ -83,7 +83,7 @@ class CarroController extends Controller
     public function show($id)
     {
         try {
-            $carro = $this->carro::with('modelos')->find($id);
+            $carro = $this->carro::with('modelo')->find($id);
             if ($carro === null) return response()->json(['msg' => 'Registro não encontrado']);
             return response()->json($carro, 200);
         } catch (\Exception $e) {

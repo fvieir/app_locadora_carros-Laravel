@@ -31,7 +31,7 @@ class CarroRequest extends FormRequest
         ];
 
         if ($this->method() === 'PATCH') {
-
+            
             if (\request()->all() === [] || \request()->all() === null) {
                 return  $rules;
             }
