@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use Illuminate\Http\Request;
 use App\Repositories\ClienteRepositories;
 use App\Http\Requests\ClienteRequest;
+use Facade\FlareClient\Http\Client;
 
 class ClienteController extends Controller
 {
@@ -92,14 +93,26 @@ class ClienteController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * 
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Cliente $cliente)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $cliente = $this->cliente::find($id);
+            
+            if ($cliente === null) return response()->json(['msg' => 'Cliente não encontrado'], 400);
+    
+            $cliente->fill($request->all());
+            $cliente->save();
+
+            return response()->json($cliente, 200);
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 
     /**
@@ -108,8 +121,19 @@ class ClienteController extends Controller
      * @param  \App\Models\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cliente $cliente)
+    public function destroy($id)
     {
-        //
+        try {
+            $cliente = $this->cliente::find($id);
+    
+            if ($cliente === null) return response()->json(['msg' => 'Cliente não encontrado'], 400);
+    
+            $cliente->delete();
+    
+            return response()->json(true, 200);
+        } catch (\Exception $e) {
+            return $e;
+        }
+
     }
 }
