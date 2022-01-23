@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Locacao;
+use App\Repositories\LocacaoRepositories;
 use Illuminate\Http\Request;
+use App\Http\Requests\LocacaoRequest;
 
 class LocacaoController extends Controller
 {
@@ -12,9 +14,26 @@ class LocacaoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function __construct(Locacao $locacao)
     {
-        //
+        $this->locacao = $locacao;
+    }
+
+    public function index(Request $request)
+    {
+        $locacaoRepo = new LocacaoRepositories($this->locacao);
+
+        if ($request->has('filtro')) {
+            $locacaoRepo->filtro($request->get('filtro'));
+        }
+
+        if ($request->has('atributos')) {
+            $locacaoRepo->selectAtr($request->get('atributos'));
+        }
+       
+        $locacao = $locacaoRepo->getResultados();
+
+        return $locacao;
     }
 
     /**
@@ -30,9 +49,9 @@ class LocacaoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LocacaoRequest $request)
     {
-        //
+        
     }
 
     /**
@@ -61,7 +80,7 @@ class LocacaoController extends Controller
      * @param  \App\Models\Locacao  $locacao
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Locacao $locacao)
+    public function update(LocacaoRequest $request, $id)
     {
         //
     }
