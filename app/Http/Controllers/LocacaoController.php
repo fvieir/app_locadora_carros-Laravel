@@ -51,7 +51,15 @@ class LocacaoController extends Controller
      */
     public function store(LocacaoRequest $request)
     {
-        
+        $request = $request->all();
+
+        // $locacao = $this->locacao::create([
+            // 'cliente_id' => $request['cliente_id'],
+            // 'carro_id' => $request['carro_id'],
+            // 'data_inicio_periodo' => $request['data_inicio_periodo'],
+        // ]);
+
+        \dump($request);
     }
 
     /**

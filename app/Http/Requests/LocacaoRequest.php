@@ -29,6 +29,8 @@ class LocacaoRequest extends FormRequest
             'data_inicio_periodo' => 'required|date|before:data_final_previsto',
             'data_final_previsto' => 'required|date',
             'data_final_realizado' => 'required|date|after_or_equal:data_inicio_periodo',
+            'km_inicial' => 'required|min:1',
+            'km_final' => 'required|min:1'
         ];
 
         // Regras dinâmicas para o metodo PATCH
