@@ -26,6 +26,7 @@ class LocacaoRequest extends FormRequest
         $rules = [
             'cliente_id' => 'required',
             'carro_id' => 'required',
+            'valor_diaria' => 'required|numeric|min:1|max:10000000',
             'data_inicio_periodo' => 'required|date|before:data_final_previsto',
             'data_final_previsto' => 'required|date',
             'data_final_realizado' => 'required|date|after_or_equal:data_inicio_periodo',
