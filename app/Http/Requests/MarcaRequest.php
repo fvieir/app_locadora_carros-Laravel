@@ -26,7 +26,7 @@ class MarcaRequest extends FormRequest
     {
         $rules = [
             'nome' => 'required|unique:marcas,nome,'.$this->marca.'|min:3',
-            'imagem' => 'required'
+            'imagem' => 'required|file|mimes:pdf,png'
         ];
 
         if ($this->method() === 'PATCH') {

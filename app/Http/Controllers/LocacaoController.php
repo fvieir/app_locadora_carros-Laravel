@@ -54,14 +54,14 @@ class LocacaoController extends Controller
     {
         try {
             $locacao = $this->locacao::create([
-                'cliente_id' => $request['cliente_id'],
-                'carro_id' => $request['carro_id'],
-                'valor_diaria' => $request['valor_diaria'],
-                'data_inicio_periodo' => Carbon::parse($request['data_inicio_periodo'])->format('Y-m-d'),
-                'data_final_realizado' => Carbon::parse($request['data_final_realizado'])->format('Y-m-d'),
-                'data_final_previsto' => Carbon::parse($request['data_final_previsto'])->format('Y-m-d'),
-                'km_inicial' => $request['km_inicial'],
-                'km_final' => $request['km_final']
+                'cliente_id' => $request->cliente_id,
+                'carro_id' => $request->carro_id,
+                'valor_diaria' => $request->valor_diaria,
+                'data_inicio_periodo' => $request->data_inicio_periodo,
+                'data_final_realizado' => $request->data_final_realizado,
+                'data_final_previsto' => $request->data_final_previsto,
+                'km_inicial' => $request->km_inicial,
+                'km_final' => $request->km_final
             ]);
     
             return response()->json($locacao, 201);
@@ -107,17 +107,10 @@ class LocacaoController extends Controller
     {
         try {
             $locacao = $this->locacao->find($id);
-            if ($locacao === null ) return response()->json(['msg' => 'Registro não encontrado'], 400);
-           
-            $locacao->cliente_id = $request['cliente_id'];
-            $locacao->carro_id = $request['carro_id'];
-            $locacao->valor_diaria = $request['valor_diaria'];
-            $locacao->data_inicio_periodo = Carbon::parse($request['data_inicio_periodo'])->format('Y-m-d');
-            $locacao->data_final_realizado = Carbon::parse($request['data_final_realizado'])->format('Y-m-d');
-            $locacao->data_final_previsto = Carbon::parse($request['data_final_previsto'])->format('Y-m-d');
-            $locacao->km_inicial = $request['km_inicial'];
-            $locacao->km_final = $request['km_final'];
 
+            if ($locacao === null ) return response()->json(['msg' => 'Registro não encontrado'], 400);
+
+            $locacao->fill($request->all());
             $locacao->save();
 
             return response()->json($locacao, 200);
@@ -132,8 +125,13 @@ class LocacaoController extends Controller
      * @param  \App\Models\Locacao  $locacao
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Locacao $locacao)
+    public function destroy($id)
     {
-        //
+        $locacao = $this->locacao->find($id);
+        if ($locacao === null) return response()->json(['msg' => 'Registro não encontrado'], 200);
+
+        $locacao->delete();
+
+        return response()->json(['msg' => true], 200);
     }
 }

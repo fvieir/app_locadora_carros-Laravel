@@ -41,14 +41,12 @@ class LocacaoRequest extends FormRequest
                 return $rules;
             }
             
-           $rules_patch = '';
-           
-           $conteudo = \request()->all();
+           $rules_patch = [];        
 
            foreach ($rules as $input => $regras) {
 
-               if (array_key_exists($input, $conteudo)) {
-                $rules_patch = [$input => $regras];
+               if (array_key_exists($input, request()->all())) {
+                $rules_patch[$input] = $regras;
                }
            }
 
