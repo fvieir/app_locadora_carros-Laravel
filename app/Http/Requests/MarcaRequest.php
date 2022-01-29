@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Facade\Ignition\DumpRecorder\Dump;
 use Illuminate\Foundation\Http\FormRequest;
 
 class MarcaRequest extends FormRequest
@@ -24,7 +25,7 @@ class MarcaRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'nome' => 'required|unique:marcas,nome|min:3',
+            'nome' => 'required|unique:marcas,nome,'.$this->marca.'|min:3',
             'imagem' => 'required'
         ];
 
