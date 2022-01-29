@@ -109,20 +109,20 @@ class LocacaoController extends Controller
             $locacao = $this->locacao->find($id);
             if ($locacao === null ) return response()->json(['msg' => 'Registro não encontrado'], 400);
            
-            $locacao = $locacao->update([
-                'cliente_id' => $request['cliente_id'],
-                'carro_id' => $request['carro_id'],
-                'valor_diaria' => $request['valor_diaria'],
-                'data_inicio_periodo' => Carbon::parse($request['data_inicio_periodo'])->format('Y-m-d'),
-                'data_final_realizado' => Carbon::parse($request['data_final_realizado'])->format('Y-m-d'),
-                'data_final_previsto' => Carbon::parse($request['data_final_previsto'])->format('Y-m-d'),
-                'km_inicial' => $request['km_inicial'],
-                'km_final' => $request['km_final']
-            ]);
+            $locacao->cliente_id = $request['cliente_id'];
+            $locacao->carro_id = $request['carro_id'];
+            $locacao->valor_diaria = $request['valor_diaria'];
+            $locacao->data_inicio_periodo = Carbon::parse($request['data_inicio_periodo'])->format('Y-m-d');
+            $locacao->data_final_realizado = Carbon::parse($request['data_final_realizado'])->format('Y-m-d');
+            $locacao->data_final_previsto = Carbon::parse($request['data_final_previsto'])->format('Y-m-d');
+            $locacao->km_inicial = $request['km_inicial'];
+            $locacao->km_final = $request['km_final'];
 
-            return response()->json($this->locacao, 200);
-        } catch (\Throwable $th) {
-            //throw $th;
+            $locacao->save();
+
+            return response()->json($locacao, 200);
+        } catch (\Exception $e) {
+            return $e;
         }
     }
 

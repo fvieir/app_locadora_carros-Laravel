@@ -37,6 +37,23 @@ class LocacaoRequest extends FormRequest
         // Regras dinâmicas para o metodo PATCH
         if ($this->method() === 'PATCH')  {
 
+            if (\request()->all() === [] || \request()->all() === null) {
+                return $rules;
+            }
+            
+           $rules_patch = '';
+           
+           $conteudo = \request()->all();
+
+           foreach ($rules as $input => $regras) {
+
+               if (array_key_exists($input, $conteudo)) {
+                $rules_patch = [$input => $regras];
+               }
+           }
+
+           return $rules_patch;
+           
         }
 
         return $rules;

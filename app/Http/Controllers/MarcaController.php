@@ -109,24 +109,23 @@ class MarcaController extends Controller
      * @param  Integer
      * @return \Illuminate\Http\Response
      */
-    public function update(MarcaRequest $request, Marca $marca)
+    public function update(MarcaRequest $request, $id)
     {
         try {
-            $file = $request->file('imagem');
-        
-            if ($marca === null) return \response()->json(['msg' => 'Registro => '. $marca->id .' não encontrado no BD'],404);
-    
-            if (isset($marca->imagem) && isset($file)) {
+            $marca = $this->marca->find($id);
+            
+            if ($marca === null) return \response()->json(['msg' => 'Registro => '. $id .' não encontrado no BD'],404);
+            
+            if ($request->file('imagem')) {
                 Storage::disk('public')->delete($marca->imagem);
+                $imagem = $request->file('imagem');
+                $imagem_urn = $imagem->store('marca','public');
+                $marca->imagem = $imagem_urn;
             }
-    
-            $file_name = $file->store('marca','public');
 
             $marca->fill($request->all());
-            $marca->imagem = $file_name;
             $marca->save();
-            \dump($marca);
-    
+           
             return \response()->json($marca, 200);
         } 
         catch (Exception $e) {

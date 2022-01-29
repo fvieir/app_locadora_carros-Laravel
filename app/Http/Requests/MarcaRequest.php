@@ -23,47 +23,31 @@ class MarcaRequest extends FormRequest
      */
     public function rules()
     {
-        if ($this->method() === 'PATCH' || $this->method() === 'PUT') {
-            
-            $rules = [
-                'nome' => 'required|unique:marcas,nome,'.$this->marca->id.'|min:3',
-                'imagem' => 'required|mimes:png,pdf|max:3000'
-            ];
-            /*
-           unique
-               1- Tabela
-               2 - nome da coluna
-               3- id que sera desconsiderado na pesquisa
-            */
-        } else {
-            $rules = [
-                'nome' => 'required| unique:marcas,nome,|min:3',
-                'imagem' => 'required|mimes:png,pdf|max:1000',
-            ];
-        }
-        
-        // Recuperar apenas as regras do input enviado
-        if($this->method() === 'PATCH') {
-            
-            if (\request()->all() === [] || \request()->all() === null) {                
-                return $rules;
-            }
+        $rules = [
+            'nome' => 'required|unique:marcas,nome|min:3',
+            'imagem' => 'required'
+        ];
 
-            $rules_patch = '';
-
+        if ($this->method() === 'PATCH') {
+           
+            $regrasDinamicas = [];
+           
             foreach ($rules as $input => $regras) {
-
-                $conteudo = \request()->all();
-
-                if (array_key_exists($input, $conteudo)){
-                    $rules_patch = [$input =>$regras];
+                
+                if (\array_key_exists($input, \request()->all())) {
+                    $regrasDinamicas[$input] = $regras;
                 }
             }
+            return $regrasDinamicas;
+        } 
+        
+        return $rules; 
 
-            return $rules_patch;
-        }
 
-        return $rules;
+        //     $rules = [
+        //         'nome' => 'required|unique:marcas,nome,'.$this->marca->id.'|min:3',
+        //         'imagem' => 'required|mimes:png,pdf|max:3000'
+        //     ];
     }
 
     public function messages() {
