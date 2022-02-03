@@ -40,6 +40,6 @@ class AuthController extends Controller
    
     public function me()
     {
-        return 'me';
+        return response()->json(\auth()->user(), 200);
     }
 }
