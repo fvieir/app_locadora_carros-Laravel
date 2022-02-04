@@ -24,8 +24,6 @@ class AuthController extends Controller
             //401 = Unauthorized => Não autorizado
             return \response()->json(['erro' => 'Usuário ou senha inválido'], 403);
         }
-    
-        return 'login';
     }
 
     public function logout()
