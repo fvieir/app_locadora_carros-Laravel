@@ -20,9 +20,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('teste', function () {
-    return 'Ola';
-});
 
 Route::get('sub', function() {
     $post = Post::select('id','title')

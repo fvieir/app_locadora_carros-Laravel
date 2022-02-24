@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class CarroSeeder extends Seeder
+class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,6 +13,6 @@ class CarroSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\User::factory()->count(10)->create();
     }
 }

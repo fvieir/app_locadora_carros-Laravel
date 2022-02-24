@@ -3,7 +3,8 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Login Vue</div>
+                <div class="card-header">Login Vue 123</div>
+                
                 <div class="card-body">
                     <form method="POST" action="">
                         <input type="hidden" name="_token" :value="crf_token">
@@ -43,7 +44,6 @@
                                    Login
                                 </button>
                                 <a class="btn btn-link" href="#">
-                                    Esquece a senha
                                 </a>
                             </div>
                         </div>

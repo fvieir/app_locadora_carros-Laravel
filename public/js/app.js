@@ -28093,7 +28093,7 @@ var render = function () {
     _c("div", { staticClass: "row justify-content-center" }, [
       _c("div", { staticClass: "col-md-8" }, [
         _c("div", { staticClass: "card" }, [
-          _c("div", { staticClass: "card-header" }, [_vm._v("Login Vue")]),
+          _c("div", { staticClass: "card-header" }, [_vm._v("Login Vue 123")]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body" }, [
             _c("form", { attrs: { method: "POST", action: "" } }, [
@@ -28216,11 +28216,7 @@ var staticRenderFns = [
           ]
         ),
         _vm._v(" "),
-        _c("a", { staticClass: "btn btn-link", attrs: { href: "#" } }, [
-          _vm._v(
-            "\n                                    Esquece a senha\n                                "
-          ),
-        ]),
+        _c("a", { staticClass: "btn btn-link", attrs: { href: "#" } }),
       ]),
     ])
   },

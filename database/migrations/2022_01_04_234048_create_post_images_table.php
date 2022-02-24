@@ -21,7 +21,7 @@ class CreatePostImagesTable extends Migration
 
             $table->timestamps();
 
-            $table->foreign('post_id')->references('id')->on('post');
+            $table->foreign('post_id')->references('id')->on('posts');
         });
     }
 
