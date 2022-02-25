@@ -16,20 +16,16 @@ use Illuminate\Support\Facades\Mail;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
+/*
 Route::get('sub', function() {
     $post = Post::select('id','title')
         ->addSelect([
-        'thumb' => PostImage::selectRaw('COUNT(*) as t')
-                    ->whereColumn('post_id', 'posts.id')
-                    ->limit(1)
-    ])->where('id', 292)
+            'thumb' => PostImage::selectRaw('COUNT(*) as t')
+            ->whereColumn('post_id', 'posts.id')
+            ->limit(1)
+            ])->where('id', 292)
     ->get();
-
+    
     return $post;
 });
 
@@ -41,6 +37,11 @@ Route::get('email', function () {
     } catch (\Exception $e) {
         return $e->getMessage();
     }
+});
+*/
+
+Route::get('/', function () {
+    return view('welcome');
 });
 
 Auth::routes();
