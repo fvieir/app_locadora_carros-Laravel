@@ -5373,9 +5373,12 @@ __webpack_require__.r(__webpack_exports__);
         })
       };
       fetch(url, config).then(function (response) {
-        console.log(response);
+        return response.json();
+      }).then(function (data) {
+        if (data.token) document.cookie = 'token=' + data.token + ';SameSite=Lax';
+        e.target.submit();
       })["catch"](function (error) {
-        console.log(response);
+        return console.log(error);
       });
     }
   }

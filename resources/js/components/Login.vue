@@ -75,12 +75,12 @@
                     })
                 }
                 fetch(url, config)
-                    .then( response => {
-                        console.log(response)
-                    } )
-                    .catch( error => {
-                        console.log(response)
+                    .then( response => response.json())
+                    .then( data => {
+                       if (data.token) document.cookie = 'token='+data.token+';SameSite=Lax'
+                       e.target.submit()
                     })
+                    .catch( error => console.log(error))
             }
         }
     }
