@@ -56,7 +56,6 @@
 
 <script>
     export default {
-        name: 'login-component',
         props: ['crf_token'],
         data () {
             return {
