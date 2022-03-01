@@ -3,11 +3,34 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Marcas</div>
+                    <div class="card-header">Busca de Marcas</div>
                     <div class="card-body">
-                        <p>Manipular registro de Marca</p>
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="inputId" class="form-label">ID</label>
+                                    <input type="email" class="form-control" id="inputId" aria-describedby="idHelp" placeholder="id">
+                                    <div id="idHelp" class="form-text">Opcional. Informe o id do registro</div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="inputNome" class="form-label">Nome</label>
+                                    <input type="text" class="form-control" id="inputNome" aria-describedby="nomeHelp" placeholder="Nome da Marca">
+                                    <div id="nomeHelp" class="form-text">Opcional. Informe o nome da marca</div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary btn-sm float-end">Pesquisar</button>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
