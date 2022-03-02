@@ -92,8 +92,8 @@
                 </div>
             </div>
         </nav>
-
-        <nav aria-label="breadcrumb">
+        
+        <nav aria-label="breadcrumb mt-3">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
                 @if (Route::currentRouteName() !== 'home')
