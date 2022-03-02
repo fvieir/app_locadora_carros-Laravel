@@ -5,20 +5,20 @@
 
                 <div class="form-group">
                     <input-container-component forLabel="inputNovoNome" label="Nome" id-help="novoNomeHelp" texto="Informe o Nome da Marca">
-                        <input type="text" class="form-control" id="inputNovoNome" aria-describedby="novoNomeHelp" placeholder="Nome da Marca">
+                        <input type="text" class="form-control" id="inputNovoNome" v-model="marca" aria-describedby="novoNomeHelp" placeholder="Nome da Marca">
                     </input-container-component>
                 </div>
 
                 <div class="form-group">
                     <input-container-component forLabel="inputFile" label="Arquivo" id-help="novoFileHelp" texto="Selecione uma imagem do tipo PNG">
-                        <input type="file" class="form-control" id="inputFile" aria-describedby="novoFileHelp" placeholder="Selecione imagem">
+                        <input type="file" class="form-control" id="inputFile" @change="getFile($event)" aria-describedby="novoFileHelp" placeholder="Selecione imagem">
                     </input-container-component>
                 </div>
 
             </template>
             <template v-slot:footer>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary">Salvar</button>
+                <button type="button" class="btn btn-primary" @click="saveBrand()">Salvar</button>
             </template>
         </modal-component>
         <div class="row justify-content-center">
@@ -86,5 +86,19 @@ import Table from './Table.vue'
 export default {
     name: 'Marcas',
     components: { InputContainer, Card, Table },
+    data () {
+        return {
+            marca: '',
+            file: []
+        }
+    },
+    methods: {
+        saveBrand () {
+            console.log(this.marca, this.file[0])
+        },
+        getFile (e) {
+            this.file = e.target.files
+        }
+    }
 }
 </script>

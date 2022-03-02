@@ -5600,6 +5600,20 @@ __webpack_require__.r(__webpack_exports__);
     InputContainer: _InputContainer_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     Card: _Card_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
     Table: _Table_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
+  },
+  data: function data() {
+    return {
+      marca: '',
+      file: []
+    };
+  },
+  methods: {
+    saveBrand: function saveBrand() {
+      console.log(this.marca, this.file[0]);
+    },
+    getFile: function getFile(e) {
+      this.file = e.target.files;
+    }
   }
 });
 
@@ -29186,12 +29200,29 @@ var render = function () {
                       },
                       [
                         _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.marca,
+                              expression: "marca",
+                            },
+                          ],
                           staticClass: "form-control",
                           attrs: {
                             type: "text",
                             id: "inputNovoNome",
                             "aria-describedby": "novoNomeHelp",
                             placeholder: "Nome da Marca",
+                          },
+                          domProps: { value: _vm.marca },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.marca = $event.target.value
+                            },
                           },
                         }),
                       ]
@@ -29223,6 +29254,11 @@ var render = function () {
                             "aria-describedby": "novoFileHelp",
                             placeholder: "Selecione imagem",
                           },
+                          on: {
+                            change: function ($event) {
+                              return _vm.getFile($event)
+                            },
+                          },
                         }),
                       ]
                     ),
@@ -29248,7 +29284,15 @@ var render = function () {
                 _vm._v(" "),
                 _c(
                   "button",
-                  { staticClass: "btn btn-primary", attrs: { type: "button" } },
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function ($event) {
+                        return _vm.saveBrand()
+                      },
+                    },
+                  },
                   [_vm._v("Salvar")]
                 ),
               ]
