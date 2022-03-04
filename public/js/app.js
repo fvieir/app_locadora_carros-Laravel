@@ -5604,15 +5604,29 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       marca: '',
-      file: []
+      file: [],
+      url: 'http://app_locadora_carros.test/api/v1/marcas'
     };
   },
   methods: {
-    saveBrand: function saveBrand() {
-      console.log(this.marca, this.file[0]);
-    },
     getFile: function getFile(e) {
       this.file = e.target.files;
+    },
+    saveBrand: function saveBrand() {
+      var formData = new FormData();
+      formData.append('nome', this.marca);
+      formData.append('imagem', this.file[0]);
+      var config = {
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json'
+        }
+      };
+      axios.post(this.url, formData, config).then(function (response) {
+        console.log('response');
+      }, function (error) {
+        console.log(error);
+      });
     }
   }
 });

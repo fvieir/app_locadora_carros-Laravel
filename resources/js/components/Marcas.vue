@@ -89,15 +89,30 @@ export default {
     data () {
         return {
             marca: '',
-            file: []
+            file: [],
+            url: 'http://app_locadora_carros.test/api/v1/marcas'
         }
     },
     methods: {
-        saveBrand () {
-            console.log(this.marca, this.file[0])
-        },
         getFile (e) {
             this.file = e.target.files
+        },
+        saveBrand () {
+            let formData = new FormData()
+            formData.append('nome', this.marca);
+            formData.append('imagem', this.file[0]);
+            let config = {
+                headers : {
+                    'Content-type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json' 
+                }
+            }
+            axios.post(this.url,formData,config)
+                .then(response => {
+                    console.log('response')
+                }, error => {
+                    console.log(error)
+                })
         }
     }
 }
