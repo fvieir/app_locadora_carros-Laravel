@@ -103,14 +103,15 @@ export default {
             formData.append('imagem', this.file[0]);
             let config = {
                 headers : {
-                    'Content-type': 'application/x-www-form-urlencoded',
+                    'Content-type': 'multipart-form-data',
                     'Accept': 'application/json' 
                 }
             }
             axios.post(this.url,formData,config)
                 .then(response => {
-                    console.log('response')
-                }, error => {
+                    console.log(response)
+                })
+                .catch(error => {
                     console.log(error)
                 })
         }

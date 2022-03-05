@@ -43,12 +43,6 @@ class MarcaRequest extends FormRequest
         } 
         
         return $rules; 
-
-
-        //     $rules = [
-        //         'nome' => 'required|unique:marcas,nome,'.$this->marca->id.'|min:3',
-        //         'imagem' => 'required|mimes:png,pdf|max:3000'
-        //     ];
     }
 
     public function messages() {

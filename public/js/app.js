@@ -5618,13 +5618,13 @@ __webpack_require__.r(__webpack_exports__);
       formData.append('imagem', this.file[0]);
       var config = {
         headers: {
-          'Content-type': 'application/x-www-form-urlencoded',
+          'Content-type': 'multipart-form-data',
           'Accept': 'application/json'
         }
       };
       axios.post(this.url, formData, config).then(function (response) {
-        console.log('response');
-      }, function (error) {
+        console.log(response);
+      })["catch"](function (error) {
         console.log(error);
       });
     }

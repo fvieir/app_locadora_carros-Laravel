@@ -74,7 +74,7 @@ class MarcaController extends Controller
             'imagem' => $file_name
         ]);
         
-        return response()->json($marca, 201);
+        return $marca;
     }
 
     /**
