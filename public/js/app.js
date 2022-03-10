@@ -5608,6 +5608,16 @@ __webpack_require__.r(__webpack_exports__);
       url: 'http://app_locadora_carros.test/api/v1/marcas'
     };
   },
+  computed: {
+    token: function token() {
+      var token = document.cookie.split(';').find(function (e) {
+        return e.startsWith('token');
+      });
+      token = token.split('=')[1];
+      token = 'Bearer ' + token;
+      return token;
+    }
+  },
   methods: {
     getFile: function getFile(e) {
       this.file = e.target.files;
@@ -5619,7 +5629,8 @@ __webpack_require__.r(__webpack_exports__);
       var config = {
         headers: {
           'Content-type': 'multipart-form-data',
-          'Accept': 'application/json'
+          'Accept': 'application/json',
+          'Authorization': this.token
         }
       };
       axios.post(this.url, formData, config).then(function (response) {
